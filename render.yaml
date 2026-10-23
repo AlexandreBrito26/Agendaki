@@ -1,0 +1,29 @@
+# Blueprint do Render: API (Docker) + PostgreSQL. O front vai na Vercel.
+services:
+  - type: web
+    name: agendaki-api
+    runtime: docker
+    rootDir: backend
+    plan: free
+    envVars:
+      - key: DB_HOST
+        fromDatabase: { name: agendaki-db, property: host }
+      - key: DB_PORT
+        fromDatabase: { name: agendaki-db, property: port }
+      - key: DB_NAME
+        fromDatabase: { name: agendaki-db, property: database }
+      - key: DB_USER
+        fromDatabase: { name: agendaki-db, property: user }
+      - key: DB_PASSWORD
+        fromDatabase: { name: agendaki-db, property: password }
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        sync: false        # ex.: https://agendaki.vercel.app
+      - key: PUBLIC_URL
+        sync: false        # mesmo domínio do front (links dos e-mails)
+      - key: MAIL_ENABLED
+        value: "false"
+databases:
+  - name: agendaki-db
+    plan: free
