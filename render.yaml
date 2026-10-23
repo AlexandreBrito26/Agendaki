@@ -1,9 +1,11 @@
-# Blueprint do Render: API (Docker) + PostgreSQL. O front vai na Vercel.
+# Blueprint do Render: app inteiro (API + front no mesmo container Docker) + PostgreSQL.
+# Não precisa de Vercel nem de VITE_API_URL: o front é servido pela própria API.
 services:
   - type: web
-    name: agendaki-api
+    name: agendaki
     runtime: docker
-    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
     plan: free
     envVars:
       - key: DB_HOST
@@ -18,10 +20,8 @@ services:
         fromDatabase: { name: agendaki-db, property: password }
       - key: JWT_SECRET
         generateValue: true
-      - key: CORS_ORIGINS
-        sync: false        # ex.: https://agendaki.vercel.app
       - key: PUBLIC_URL
-        sync: false        # mesmo domínio do front (links dos e-mails)
+        sync: false        # URL do próprio app no Render (links dos e-mails). Ex.: https://agendaki.onrender.com
       - key: MAIL_ENABLED
         value: "false"
 databases:

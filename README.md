@@ -10,7 +10,7 @@ Mini-SaaS de agendamentos para pequenos negócios (barbearias, salões, estúdio
 | Backend | Java 21 + Spring Boot 3 (Web, Data JPA, Security, Validation) |
 | Banco | PostgreSQL |
 | Auth | JWT (dono do negócio) |
-| Deploy | Front na Vercel, API + banco no Render/Railway |
+| Deploy | Um container Docker só (API + front embutido) + PostgreSQL no Render |
 
 ## Estrutura
 
@@ -130,9 +130,11 @@ mvn test    # unitários + BookingFlowTest (precisa de Docker: sobe um PostgreSQ
 
 Passo a passo completo: [docs/DEPLOY.md](docs/DEPLOY.md).
 
-1. **API + banco (Render):** `render.yaml` na raiz é um Blueprint (New → Blueprint). Preencha `CORS_ORIGINS` e `PUBLIC_URL` com o domínio do front. O `backend/Dockerfile` faz o build com Maven. O plano free do Render dorme após inatividade (a 1ª requisição demora).
-2. **Front (Vercel):** projeto com *Root Directory* = `frontend`, variável `VITE_API_URL` = URL da API. O `vercel.json` já cuida do rewrite do SPA.
-3. Crie sua conta em `/cadastro`, cadastre serviços e profissionais (com horários) e compartilhe `https://seu-front/seu-slug`.
+1. **Tudo no Render:** `render.yaml` na raiz é um Blueprint (New → Blueprint). O `Dockerfile` da raiz builda o front (Vite), embute o resultado na API Spring Boot e sobe um container só, junto com o PostgreSQL. Não precisa de Vercel, `VITE_API_URL` nem CORS: front e API ficam no mesmo domínio.
+2. Preencha `PUBLIC_URL` com a URL do próprio app no Render (só é usada nos links dos e-mails).
+3. Crie sua conta em `/cadastro`, cadastre serviços e profissionais (com horários) e compartilhe `https://seu-app.onrender.com/seu-slug`.
+
+O plano free do Render dorme após inatividade (a 1ª requisição demora).
 
 ## Frontend (página pública de agendamento)
 
@@ -157,7 +159,7 @@ npm run dev      # http://localhost:5173 — /api é repassado para localhost:80
 npm run build
 ```
 
-Em produção (Vercel), defina `VITE_API_URL` com a URL da API e inclua o domínio do front em `CORS_ORIGINS` no backend. O `vercel.json` já faz o rewrite para o SPA.
+Em produção o front é servido pela própria API (mesmo domínio), então não há variável a configurar. `VITE_API_URL` e `CORS_ORIGINS` só servem se você hospedar o front em outro domínio (ex.: Vercel, que usa o `vercel.json`).
 
 Detalhes: os dias e o "hoje" são calculados no fuso do negócio (`timezone` do catálogo); se o horário for tomado por outro cliente (409), o fluxo volta à escolha de horário com a mensagem da API.
 
