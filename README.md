@@ -159,7 +159,9 @@ npm run dev      # http://localhost:5173 — /api é repassado para localhost:80
 npm run build
 ```
 
-Em produção o front é servido pela própria API (mesmo domínio), então não há variável a configurar. `VITE_API_URL` e `CORS_ORIGINS` só servem se você hospedar o front em outro domínio (ex.: Vercel, que usa o `vercel.json`).
+Em produção o front é servido pela própria API (mesmo domínio), então não há variável a configurar.
+
+**Vercel (opcional):** o `frontend/vercel.json` repassa `/api/*` para a API no Render (troque `agendaki.onrender.com` pela URL real do seu serviço), então também não precisa de `VITE_API_URL` nem de CORS. Na Vercel: *Root Directory* = `frontend`.
 
 Detalhes: os dias e o "hoje" são calculados no fuso do negócio (`timezone` do catálogo); se o horário for tomado por outro cliente (409), o fluxo volta à escolha de horário com a mensagem da API.
 

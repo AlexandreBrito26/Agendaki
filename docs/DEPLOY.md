@@ -1,6 +1,6 @@
 # Checklist de deploy
 
-O app inteiro (API + front) sobe em **um container só** no Render, com PostgreSQL. Não precisa de Vercel nem de variável no front: o front é servido pela própria API e chama `/api` no mesmo domínio (sem CORS).
+O app inteiro (API + front) sobe em **um container só** no Render, com PostgreSQL. A Vercel é opcional e também não precisa de variável no front: o front é servido pela própria API e chama `/api` no mesmo domínio (sem CORS).
 
 ## 0. Antes de tudo
 - [ ] `cd backend && mvn test` passa (precisa de Docker, por causa do `BookingFlowTest`)
@@ -24,10 +24,16 @@ O app inteiro (API + front) sobe em **um container só** no Render, com PostgreS
 - [ ] Abrir o link do cliente, remarcar e cancelar
 - [ ] `/api/qualquer-coisa` deve dar 401/404, nunca HTML
 
-## 3. E-mail (opcional)
+## 3. Vercel (opcional)
+Útil se quiser o front num domínio da Vercel. Não precisa de variável de ambiente.
+1. Em `frontend/vercel.json`, confira se o destino do `/api/:path*` é a URL real do seu serviço no Render (o padrão é `https://agendaki.onrender.com`). Se mudar, faça commit e push.
+2. Vercel → **Add New → Project** → mesmo repositório, **Root Directory** = `frontend`, preset Vite → Deploy.
+3. A Vercel repassa `/api/*` para o Render (mesmo domínio para o navegador, sem CORS). Se usar e-mails, ponha o domínio da Vercel em `PUBLIC_URL` para os links caírem nela.
+
+## 4. E-mail (opcional)
 Com `MAIL_ENABLED=false` (padrão) o e-mail só aparece no log. Para enviar de verdade:
 `MAIL_ENABLED=true`, `MAIL_FROM`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`.
 Teste com um agendamento que tenha e-mail antes de divulgar (esta parte nunca rodou em ambiente real).
 
-## 4. Prints para o README
+## 5. Prints para o README
 Salve em `docs/img/`: página pública (escolha de horário), confirmação, painel da agenda e grade de horários dos profissionais.
