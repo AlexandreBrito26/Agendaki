@@ -161,7 +161,7 @@ npm run build
 
 Em produção o front é servido pela própria API (mesmo domínio), então não há variável a configurar.
 
-**Vercel (opcional):** o `frontend/vercel.json` repassa `/api/*` para a API no Render (troque `agendaki.onrender.com` pela URL real do seu serviço), então também não precisa de `VITE_API_URL` nem de CORS. Na Vercel: *Root Directory* = `frontend`.
+**Vercel (opcional):** o `frontend/vercel.json` repassa `/api/*` para a API no Render (troque `agendaki-3rp3.onrender.com` pela URL real do seu serviço), então também não precisa de `VITE_API_URL` nem de CORS. Na Vercel: *Root Directory* = `frontend`.
 
 Detalhes: os dias e o "hoje" são calculados no fuso do negócio (`timezone` do catálogo); se o horário for tomado por outro cliente (409), o fluxo volta à escolha de horário com a mensagem da API.
 

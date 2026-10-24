@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/:path*", "destination": "https://agendaki.onrender.com/api/:path*" },
+    { "source": "/api/:path*", "destination": "https://agendaki-3rp3.onrender.com/api/:path*" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
