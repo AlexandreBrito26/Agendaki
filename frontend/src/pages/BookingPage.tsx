@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { api, ApiError, type Appointment, type Catalog } from '../api'
 import DateTimePicker from '../components/DateTimePicker'
+import { canAddToCalendar, downloadIcs, googleCalendarUrl } from '../lib/calendar'
+import { loadCustomer, saveCustomer } from '../lib/customer'
 import { formatDuration, formatLongDate, formatPrice, maskPhone } from '../lib/format'
 
 const STEPS = ['Serviço', 'Profissional', 'Horário', 'Seus dados'] as const
@@ -16,9 +18,10 @@ export default function BookingPage() {
   const [professionalId, setProfessionalId] = useState<number | null>(null)
   const [date, setDate] = useState<string | null>(null)
   const [time, setTime] = useState<string | null>(null)
-  const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
-  const [email, setEmail] = useState('')
+  const [saved] = useState(loadCustomer) // dados de um agendamento anterior neste aparelho
+  const [name, setName] = useState(saved.name)
+  const [phone, setPhone] = useState(saved.phone)
+  const [email, setEmail] = useState(saved.email)
 
   const [submitting, setSubmitting] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
@@ -51,7 +54,16 @@ export default function BookingPage() {
       </main>
     )
   }
-  if (!catalog) return <main className="shell"><p className="muted center">Carregando…</p></main>
+  if (!catalog) {
+    return (
+      <main className="shell" aria-busy="true" aria-label="Carregando">
+        <div className="hero"><span className="skel skel--line" style={{ width: 90 }} /><span className="skel skel--title" /></div>
+        <div className="card stack">
+          {[0, 1, 2].map(i => <span key={i} className="skel skel--option" />)}
+        </div>
+      </main>
+    )
+  }
 
   const manageUrl = (token: string) => `${window.location.origin}/${slug}/agendamento/${token}`
 
@@ -76,6 +88,7 @@ export default function BookingPage() {
         customerName: name.trim(), customerPhone: phone,
         customerEmail: email.trim() || undefined,
       })
+      saveCustomer({ name: name.trim(), phone, email: email.trim() })
       setDone(appt)
     } catch (err) {
       const apiErr = err as ApiError
@@ -115,6 +128,12 @@ export default function BookingPage() {
               </div>
             </div>
           )}
+          {canAddToCalendar(done) && (
+            <div className="actions">
+              <a className="btn" href={googleCalendarUrl(done, catalog.businessName)} target="_blank" rel="noreferrer">📅 Google Agenda</a>
+              <button type="button" className="btn" onClick={() => downloadIcs(done, catalog.businessName)}>⬇ Baixar .ics</button>
+            </div>
+          )}
           {done.manageToken && (
             <Link className="btn btn--primary" to={`/${slug}/agendamento/${done.manageToken}`}>
               Ver / alterar agendamento
@@ -143,7 +162,7 @@ export default function BookingPage() {
       </ol>
 
       <div className="layout">
-        <section className="card stack">
+        <section className="card stack pane" key={step}>
           {back && <button type="button" className="linkbtn" onClick={back}>← Voltar</button>}
 
           {step === 0 && (
@@ -197,7 +216,7 @@ export default function BookingPage() {
                 onChange={(d, t) => { setDate(d); setTime(t); setFormError(null) }}
               />
               <button className="btn btn--primary" disabled={!date || !time} onClick={() => setStep(3)}>
-                Continuar
+                Continuar{date && time ? ` · ${formatLongDate(date).split(',')[0]} às ${time}` : ''}
               </button>
             </>
           )}
@@ -205,6 +224,7 @@ export default function BookingPage() {
           {step === 3 && (
             <form className="stack" onSubmit={submit} noValidate>
               <h2>Seus dados</h2>
+              {saved.name && <p className="hint">Preenchemos com os dados do seu último agendamento. Confira antes de confirmar.</p>}
               <label className="field">
                 <span>Nome</span>
                 <input value={name} onChange={e => setName(e.target.value)} autoComplete="name" maxLength={100} required />

@@ -1,0 +1,60 @@
+// Temas: cada um só define variáveis de cor. O padrão (:root) é "floresta".
+// data-theme é colocado no <html> por src/theme.ts.
+:root, :root[data-theme='floresta'] {
+  color-scheme: light;
+  --bg: #faf6ee; --ink: #1c2a22; --muted: #5f6d64; --line: #e3ddcf;
+  --card: #ffffff; --surface: #ffffff;
+  --accent: #14532d; --accent-soft: #dcefe3; --on-accent: #ffffff;
+  --danger: #9b2c2c; --danger-soft: #fdecec; --warn: #8a5a00;
+}
+:root[data-theme='oceano'] {
+  color-scheme: light;
+  --bg: #f1f7fb; --ink: #10263a; --muted: #56697a; --line: #d5e2ec;
+  --card: #ffffff; --surface: #ffffff;
+  --accent: #0b5d8a; --accent-soft: #dbeefa; --on-accent: #ffffff;
+  --danger: #9b2c2c; --danger-soft: #fdecec; --warn: #8a5a00;
+}
+:root[data-theme='vinho'] {
+  color-scheme: light;
+  --bg: #fbf3f3; --ink: #2d1a1f; --muted: #7a5f66; --line: #ecdcdf;
+  --card: #ffffff; --surface: #ffffff;
+  --accent: #8c1d40; --accent-soft: #f8dfe6; --on-accent: #ffffff;
+  --danger: #a12222; --danger-soft: #fdecec; --warn: #8a5a00;
+}
+:root[data-theme='ambar'] {
+  color-scheme: light;
+  --bg: #fff8ee; --ink: #2b2112; --muted: #6f6247; --line: #eadcc0;
+  --card: #ffffff; --surface: #ffffff;
+  --accent: #b45309; --accent-soft: #fde8c8; --on-accent: #ffffff;
+  --danger: #9b2c2c; --danger-soft: #fdecec; --warn: #8a5a00;
+}
+
+// ---- Noturnos ----
+:root[data-theme='noite'] {
+  color-scheme: dark;
+  --bg: #0f1a14; --ink: #e6efe9; --muted: #9fb1a6; --line: #24352b;
+  --card: #16241c; --surface: #1b2b21;
+  --accent: #5fd38d; --accent-soft: #1d3a29; --on-accent: #06210f;
+  --danger: #f08a8a; --danger-soft: #3a1c1c; --warn: #f0b64d;
+}
+:root[data-theme='meia-noite'] {
+  color-scheme: dark;
+  --bg: #0b1220; --ink: #e5ecf6; --muted: #93a4bc; --line: #1f2c44;
+  --card: #111a2c; --surface: #16213a;
+  --accent: #60a5fa; --accent-soft: #172a4a; --on-accent: #06142b;
+  --danger: #f58a8a; --danger-soft: #3b1d24; --warn: #f0b64d;
+}
+:root[data-theme='grafite'] {
+  color-scheme: dark;
+  --bg: #121212; --ink: #ececec; --muted: #a1a1a1; --line: #2a2a2a;
+  --card: #1a1a1a; --surface: #202020;
+  --accent: #fbbf24; --accent-soft: #3a2f12; --on-accent: #1c1500;
+  --danger: #f28b82; --danger-soft: #3a1e1c; --warn: #fbbf24;
+}
+:root[data-theme='ameixa'] {
+  color-scheme: dark;
+  --bg: #150f1f; --ink: #efe8f7; --muted: #b0a1c4; --line: #2e2342;
+  --card: #1c1530; --surface: #231a3a;
+  --accent: #c084fc; --accent-soft: #2c1f48; --on-accent: #1d0a33;
+  --danger: #f58a9a; --danger-soft: #3b1c28; --warn: #f0b64d;
+}

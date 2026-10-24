@@ -150,6 +150,8 @@ React + TypeScript + Vite + SCSS + react-router. Rotas:
 | `/painel/servicos` | CRUD de serviços (nome, duração, preço; desativar/reativar) |
 | `/painel/profissionais` | CRUD de profissionais, serviços que fazem e grade semanal (várias janelas por dia) |
 
+**Visual e usabilidade:** 8 temas (Floresta, Oceano, Vinho e Âmbar de dia; Noite, Meia-noite, Grafite e Ameixa à noite) com seletor em todas as páginas, salvo no aparelho e seguindo o modo claro/escuro do sistema na primeira visita. Horários agrupados em manhã/tarde/noite, esqueletos de carregamento, "ver o próximo dia com horário", dados do cliente lembrados no aparelho e botões "Google Agenda"/.ics na confirmação.
+
 `entrar`, `cadastro` e `painel` são rotas fixas; o cadastro barra esses slugs.
 
 ```bash

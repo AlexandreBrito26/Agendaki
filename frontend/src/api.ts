@@ -22,6 +22,8 @@ export interface Appointment {
   startTime: string
   endTime: string
   status: 'CONFIRMED' | 'CANCELLED'
+  startsAt?: string
+  endsAt?: string
   manageToken?: string
 }
 export interface BookingPayload {

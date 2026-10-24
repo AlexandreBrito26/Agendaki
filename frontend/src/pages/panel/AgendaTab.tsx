@@ -4,6 +4,7 @@ import { useAuth } from '../../authContext'
 import { addDays, formatLongDate, reminderMessage, whatsappUrl } from '../../lib/format'
 import { owner, type Professional } from '../../ownerApi'
 
+const hm = () => new Date().toTimeString().slice(0, 5)
 const localToday = () => new Intl.DateTimeFormat('en-CA').format(new Date())
 
 export default function AgendaTab() {
@@ -15,6 +16,8 @@ export default function AgendaTab() {
   const [error, setError] = useState<string | null>(null)
   const [confirming, setConfirming] = useState<number | null>(null)
   const [reloads, setReloads] = useState(0)
+  const [nowHm, setNowHm] = useState(hm) // hora atual, atualizada a cada minuto
+  useEffect(() => { const id = setInterval(() => setNowHm(hm()), 60_000); return () => clearInterval(id) }, [])
 
   useEffect(() => { owner.professionals().then(setPros).catch(() => {}) }, [])
 
@@ -33,6 +36,7 @@ export default function AgendaTab() {
     try { await owner.cancelAppointment(id); setConfirming(null); setReloads(n => n + 1) } catch (e) { setError((e as Error).message) }
   }
   const active = list?.filter(a => a.status === 'CONFIRMED') ?? []
+  const next = date === localToday() ? active.find(a => a.startTime >= nowHm) : undefined
 
   return (
     <section className="stack">
@@ -49,8 +53,11 @@ export default function AgendaTab() {
         </select>
       </div>
       <h2 className="cap">{formatLongDate(date)} <span className="muted">· {active.length} agendamento{active.length === 1 ? '' : 's'}</span></h2>
+      {next && <p className="alert">Próximo: <strong>{next.startTime}</strong> · {next.customerName} ({next.serviceName})</p>}
       {error && <p className="alert alert--error">{error}</p>}
-      {list === null && !error && <p className="muted">Carregando…</p>}
+      {list === null && !error && (
+        <ul className="agenda" aria-busy="true" aria-label="Carregando">{[0, 1, 2].map(i => <li key={i} className="card"><span className="skel skel--option" /></li>)}</ul>
+      )}
       {list?.length === 0 && <div className="card empty">Nenhum agendamento neste dia.</div>}
       <ul className="agenda">
         {list?.map(a => (

@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+import ThemeSwitcher from './components/ThemeSwitcher'
 import Home from './pages/Home'
 import BookingPage from './pages/BookingPage'
 import ManagePage from './pages/ManagePage'
@@ -10,6 +11,7 @@ import ProfessionalsTab from './pages/panel/ProfessionalsTab'
 
 export default function App() {
   return (
+    <>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/entrar" element={<AuthPage mode="login" />} />
@@ -22,5 +24,7 @@ export default function App() {
       <Route path="/:slug" element={<BookingPage />} />
       <Route path="/:slug/agendamento/:token" element={<ManagePage />} />
     </Routes>
+    <ThemeSwitcher />
+    </>
   )
 }
