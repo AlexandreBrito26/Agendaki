@@ -117,6 +117,12 @@ PUBLIC_URL=https://seu-front.vercel.app   # base dos links "remarcar/cancelar"
 
 > ⚠️ Esta parte (V2, `AppointmentMailListener`, `ReminderJob`) foi escrita sem poder rodar `mvn` (sem acesso ao Maven Central no ambiente em que foi feita): só passou por checagem de sintaxe. Rode `mvn test` e faça um agendamento com e-mail antes de confiar.
 
+## WhatsApp (confirmação)
+
+Ao concluir o agendamento, o telefone informado recebe uma mensagem de confirmação pela WhatsApp Cloud API (Meta), em segundo plano: se falhar, o agendamento continua salvo. Por padrão `WHATSAPP_ENABLED=false` e a mensagem só aparece no log. Para enviar de verdade é preciso criar o template na Meta e definir `WHATSAPP_ENABLED=true`, `WHATSAPP_PHONE_NUMBER_ID` e `WHATSAPP_ACCESS_TOKEN`. Passo a passo, texto do template e testes com o número de teste: [docs/WHATSAPP.md](docs/WHATSAPP.md).
+
+> ⚠️ Esta parte (`com.agendaki.whatsapp`) também foi escrita sem poder rodar `mvn` (Maven Central bloqueado no ambiente): só passou por checagem de sintaxe. Rode `mvn test` (os testes novos não precisam de Docker) e faça um envio de teste antes de confiar.
+
 ## Testes
 
 ```bash

@@ -7,6 +7,7 @@ import com.agendaki.professional.Professional;
 import com.agendaki.professional.ProfessionalRepository;
 import com.agendaki.service.ServiceOffering;
 import com.agendaki.service.ServiceOfferingRepository;
+import com.agendaki.whatsapp.AppointmentWhatsAppEvent;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
@@ -119,6 +120,11 @@ public class AppointmentService {
         // O e-mail só sai depois do commit (ver AppointmentMailListener).
         events.publishEvent(new AppointmentMailEvent(
                 AppointmentMailEvent.Kind.CONFIRMATION, appointment.getCustomerEmail(), appointment.getCustomerName(),
+                business.getName(), business.getSlug(), service.getName(), professional.getName(),
+                appointment.getStartsAt(), zone, appointment.getManageToken()));
+        // A confirmação por WhatsApp também só sai depois do commit (ver AppointmentWhatsAppListener).
+        events.publishEvent(new AppointmentWhatsAppEvent(
+                appointment.getCustomerPhone(), appointment.getCustomerName(),
                 business.getName(), business.getSlug(), service.getName(), professional.getName(),
                 appointment.getStartsAt(), zone, appointment.getManageToken()));
         return toResponse(appointment, zone, service.getName(), professional.getName(), true);

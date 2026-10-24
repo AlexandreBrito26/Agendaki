@@ -24,6 +24,14 @@ services:
         sync: false        # URL do próprio app no Render (links dos e-mails). Ex.: https://agendaki.onrender.com
       - key: MAIL_ENABLED
         value: "false"
+      - key: WHATSAPP_ENABLED
+        value: "false"     # passe para "true" depois de preencher PHONE_NUMBER_ID e ACCESS_TOKEN (ver docs/WHATSAPP.md)
+      - key: WHATSAPP_PHONE_NUMBER_ID
+        sync: false
+      - key: WHATSAPP_ACCESS_TOKEN
+        sync: false        # segredo: preencha só no painel do Render
+      - key: WHATSAPP_TEMPLATE_NAME
+        value: agendamento_confirmado
 databases:
   - name: agendaki-db
     plan: free
